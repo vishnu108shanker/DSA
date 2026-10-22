@@ -15,20 +15,24 @@
  */
 class Solution {
     public void flatten(TreeNode root) {
-        preorder(root) ;
+        preorder(root);
     }
 
-    private TreeNode preorder(TreeNode root){
-        if(root == null) return null ;
-        TreeNode head = root ;
-        TreeNode right = root.right ;
-        root.right = preorder(root.left) ;
-        while(root.right != null){
-            root.left = null ;
-            root = root.right ;
+    private TreeNode preorder(TreeNode root) {
+        if (root == null) return null;
+
+        TreeNode head = root;
+        TreeNode originalRight = root.right;
+
+        root.right = preorder(root.left);
+        root.left = null;
+
+        while (root.right != null) {
+            root = root.right;
         }
-        root.right = preorder(right) ;
-            root.left = null ;
-        return head ;
+
+        root.right = preorder(originalRight);
+
+        return head;
     }
 }

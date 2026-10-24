@@ -4,12 +4,10 @@ class Solution {
         int len  = isConnected.length ;
         int index = 0 ;
         for(int x = 0 ; x < len ; x++){
-            int[] num = isConnected[x] ;
-            if(!mp.contains(x)) index++ ;
-            for(int i = 0 ; i < len ; i++){
-                if(num[i] == 1){
-                    if(!mp.contains(x)) prabhuMarkkaro(isConnected , i) ;
-                }
+            if(!mp.contains(x)){
+                index++ ;
+                int[] num = isConnected[x] ;
+                prabhuMarkkaro(isConnected , x) ;
             }
         }
         return index ;

@@ -1,0 +1,30 @@
+class Solution {
+    private HashSet<Integer> mp = new HashSet<>() ;
+    public int findCircleNum(int[][] isConnected) {
+        int len  = isConnected.length ;
+        int index = 0 ;
+        for(int x = 0 ; x < len ; x++){
+            int[] num = isConnected[x] ;
+            if(!mp.contains(x)) index++ ;
+            for(int i = 0 ; i < len ; i++){
+                if(num[i] == 1){
+                    if(!mp.contains(x)) prabhuMarkkaro(isConnected , i) ;
+                }
+            }
+        }
+        return index ;
+    }
+
+    private void prabhuMarkkaro(int[][] isConnected, int j ){
+        int[] arr = isConnected[j] ;
+         
+        for(int i = 0 ; i < isConnected.length ; i++){
+            if(arr[i] == 1) {
+                if(!mp.contains(i)){
+                    mp.add(i) ;
+                    prabhuMarkkaro(isConnected , i) ;
+                }
+            }
+        }
+    }
+}

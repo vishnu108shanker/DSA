@@ -2,33 +2,41 @@ class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
         int n = graph.length;
         int[] outDegree = new int[n];
-        List<List<Integer>> reverse = new ArrayList<>();
-        List<Integer> result = new ArrayList<>();
-        Queue<Integer> q = new ArrayDeque<>();
+        boolean[] safe = new boolean[n];
 
-        for (int i = 0; i < n; i++) {
-            reverse.add(new ArrayList<>());
-        }
+        // Reverse graph as arrays (faster than List<List<Integer>>)
+        int[] head = new int[n];
+        Arrays.fill(head, -1);
+        int edges = 0;
+        for (int[] g : graph) edges += g.length;
+        int[] nxt = new int[edges];
+        int[] to = new int[edges];
+        int cnt = 0;
+
+        int[] queue = new int[n];
+        int qh = 0, qt = 0;
 
         for (int i = 0; i < n; i++) {
             outDegree[i] = graph[i].length;
-            if (graph[i].length == 0) q.add(i);
+            if (outDegree[i] == 0) queue[qt++] = i;
             for (int next : graph[i]) {
-                reverse.get(next).add(i);   
+                to[cnt] = i;            // reversed edge: next -> i
+                nxt[cnt] = head[next];
+                head[next] = cnt++;
             }
         }
 
-        while (!q.isEmpty()) {
-            int node = q.poll();
-            result.add(node);
-            for (int parent : reverse.get(node)) {
-                if (--outDegree[parent] == 0) {
-                    q.add(parent);
-                }
+        while (qh < qt) {
+            int node = queue[qh++];
+            safe[node] = true;
+            for (int e = head[node]; e != -1; e = nxt[e]) {
+                int parent = to[e];
+                if (--outDegree[parent] == 0) queue[qt++] = parent;
             }
         }
 
-        Collections.sort(result);
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) if (safe[i]) result.add(i);
         return result;
     }
 }
